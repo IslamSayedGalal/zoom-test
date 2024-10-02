@@ -11,8 +11,6 @@ function App() {
   const role = 1;
   const userName = "Islam Galal";
   const userEmail = "islam.galal@mobidevlabs.com";
-  const registrantToken = "";
-  const zakToken = "";
 
   const getSignature = async () => {
     try {
