@@ -6,7 +6,7 @@ import { JoinMeeting } from "./JoinMeeting";
 
 function MeetingPage() {
   const { id } = useParams();
-  const [meetingData, setMeetingData] = useState<any>(null);
+  const [meetingData, setMeetingData] = useState<unknown>(null);
 
   console.log("id", id); // Access the userId from the URL params
 
