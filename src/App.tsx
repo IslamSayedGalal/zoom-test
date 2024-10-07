@@ -7,7 +7,7 @@ import { JoinMeeting } from "./JoinMeeting";
 function MeetingPage() {
   // const { id } = useParams();
   const id = 1;
-  const [meetingData, setMeetingData] = useState<unknown>(null);
+  const [meetingData, setMeetingData] = useState<{id: string, password: string}>({ id: "", password: "" });
 
   console.log("id", id); // Access the userId from the URL params
 
@@ -26,8 +26,8 @@ function App() {
   return (
     <Routes>
       {/* Define a route with a dynamic userId parameter */}
-      <Route path="/" element={<MeetingPage />} />
-      {/* <Route path="/meeting/:id" element={<MeetingPage />} /> */}
+      {/* <Route path="/" element={<MeetingPage />} /> */}
+      <Route path="/meeting/:id" element={<MeetingPage />} />
     </Routes>
   );
 }

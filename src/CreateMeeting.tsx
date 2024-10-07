@@ -1,7 +1,10 @@
 import { useState } from "react";
 
 interface CreateMeetingProps {
-    setMeetingData: (data: unknown) => void;
+    setMeetingData: (data: {
+        id: string;
+        password: string;
+    }) => void;
 }
 
 export const CreateMeeting = ({ setMeetingData }: CreateMeetingProps) => {
@@ -9,8 +12,9 @@ export const CreateMeeting = ({ setMeetingData }: CreateMeetingProps) => {
 
     const createZoomMeeting = async () => {
         setIsLoading(true);
-        const url = "http://localhost:4000/creareMeeting";
-        const bearerToken = "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImU3N2NmNjg0LTllYWItNDlmNy04NDg2LTc1MDQzNDJkMDg5NiJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiItWjJzU0ZHaVRfR1dVQnVmZ25EdGFnIiwidmVyIjo5LCJhdWlkIjoiMGVlYjk5MWM1ODZjZjIxM2IyYjkzZGY1ODUxZmQwNDYiLCJuYmYiOjE3MjY3NTk3MDksImNvZGUiOiJzLXVHVlRRblRJMmE3V3IwMFo4a2JRMmF6S21xMTdEaGIiLCJpc3MiOiJ6bTpjaWQ6cDladnlPTE1UX2loVzJlOG5hTWdpUSIsImdubyI6MCwiZXhwIjoxNzI2NzYzMzA5LCJ0eXBlIjozLCJpYXQiOjE3MjY3NTk3MDksImFpZCI6IkdQNWJnTW5GUlVHdHV6WHVFY19SdUEifQ.GCaaMyPdyIr5YLa32aSExNfnTwmydcfOycTs7CgiPYDH7EVVoksdakGqGCtO2-wrlinja29q6eTMHthDYKUsqA"; // Update with your token
+        // const url = "http://localhost:4000/creareMeeting";
+        const url = "https://back-zoom-production-4477.up.railway.app/creareMeeting"
+        const bearerToken = "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImIzNjMwYjgxLTlkNDUtNGU0OS1hZDgxLWIwMTUzNTIxMDdjYyJ9.eyJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiItWjJzU0ZHaVRfR1dVQnVmZ25EdGFnIiwidmVyIjoxMCwiYXVpZCI6ImU4ZGUwMzRkNmY3Yjk4NjdlMTZkYjdlMGFhNmNhOThiODlkOTNhMTdmOGUwMTI5YWM0ZjAwYzkwZjg5Yjc4ZWMiLCJuYmYiOjE3MjgyOTEzNDYsImNvZGUiOiJDT0NZdjBOUlJmMnoyUThPSHJmN0tRcWRlZ2ljNFNMOUIiLCJpc3MiOiJ6bTpjaWQ6cDladnlPTE1UX2loVzJlOG5hTWdpUSIsImdubyI6MCwiZXhwIjoxNzI4Mjk0OTQ2LCJ0eXBlIjozLCJpYXQiOjE3MjgyOTEzNDYsImFpZCI6IkdQNWJnTW5GUlVHdHV6WHVFY19SdUEifQ.qA24Oxr_9RSuebPd_ow6JiiP-MzArUshQ8cDG8csZ3mOmjh8KwmfHpktfZ15JbfdwAuLEZPnVPzkSTpstmP4UA"; // Update with your token
 
         const requestBody = {
             topic: "zoom1",

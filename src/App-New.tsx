@@ -4,7 +4,8 @@ import ZoomMtgEmbedded from "@zoom/meetingsdk/embedded";
 function App() {
   const client = ZoomMtgEmbedded.createClient();
 
-  const authEndpoint = "http://localhost:4000"; // http://localhost:4000
+  // const authEndpoint = "http://localhost:4000"; // http://localhost:4000
+  const authEndpoint = "https://back-zoom-production-4477.up.railway.app"; // http://localhost:4000
   const sdkKey = "ripqfBNqQ5e8dSdrWMKpA";
   const meetingNumber = "99470899045";
   const passWord = "123456";

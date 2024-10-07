@@ -4,7 +4,10 @@ ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
 
 interface JoinMeetingProps {
-  meetingData: unknown;
+  meetingData: {
+    id: string;
+    password: string;
+  };
   id: unknown;
 }
 
@@ -35,6 +38,12 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
     email: "eslamgalal312@gmail.com",
   };
 
+  const user4 = {
+    id: 0,
+    name: "Islam Sayed Galal 3",
+    email: "@gmail.com",
+  };
+
   let userUsed = user1;
 
   if (id === "1") {
@@ -46,41 +55,45 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
   } else if (id === "3") {
     console.log("user3", user3);
     userUsed = user3;
+  } else if (id === "4") {
+    console.log("user4", user4);
+    userUsed = user4;
   }
 
   const getSignature = async () => {
-    // if (!meetingData) {
-    //   console.error("No meeting data available.");
-    //   return;
-    // }
+    if (!meetingData) {
+      console.error("No meeting data available.");
+      return;
+    }
 
     // const authEndpoint = "http://localhost:4000";
-    // const meetingNumber = meetingData?.id;
+    const authEndpoint = "https://back-zoom-production-4477.up.railway.app";
 
-    // try {
-    //     const req = await fetch(authEndpoint, {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({
-    //             meetingNumber: meetingNumber,
-    //             role: userUsed.id || 1,
-    //         }),
-    //     });
+    const meetingNumber = meetingData?.id;
 
-    //     const res = await req.json();
-    //     console.log("res", res.signature);
-    //     const signature = res.signature as string;
-    //     startMeeting(signature, meetingNumber, meetingData.password);
-    // } catch (e) {
-    //     console.log(e);
-    // }
+    try {
+      const req = await fetch(authEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          meetingNumber: meetingNumber,
+          role: userUsed.id || 1,
+        }),
+      });
 
-    const signature = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJyaXBxZkJOcVE1ZThkU2RyV01LcEEiLCJzZGtLZXkiOiJyaXBxZkJOcVE1ZThkU2RyV01LcEEiLCJtbiI6IjkyNzM1MDMxNDQ2Iiwicm9sZSI6MSwiaWF0IjoxNzI3ODk4NjExLCJleHAiOjE3Mjc5MDU4MTEsInRva2VuRXhwIjoxNzI3OTA1ODExfQ.3iA4fxhzw54gBJ0jYJkrRPMz1jIWAccTV2n1boLKccw";
-    const meetingNumber = '92735031446';
-    const meetingPassword = '123456';
+      const res = await req.json();
+      console.log("res", res.signature);
+      const signature = res.signature as string;
+      startMeeting(signature, meetingNumber, meetingData.password);
+    } catch (e) {
+      console.log(e);
+    }
 
+    // const signature = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJyaXBxZkJOcVE1ZThkU2RyV01LcEEiLCJzZGtLZXkiOiJyaXBxZkJOcVE1ZThkU2RyV01LcEEiLCJtbiI6IjkyNzM1MDMxNDQ2Iiwicm9sZSI6MSwiaWF0IjoxNzI3ODk4NjExLCJleHAiOjE3Mjc5MDU4MTEsInRva2VuRXhwIjoxNzI3OTA1ODExfQ.3iA4fxhzw54gBJ0jYJkrRPMz1jIWAccTV2n1boLKccw";
+    // const meetingNumber = '92735031446';
+    // const meetingPassword = '123456';
 
-    startMeeting(signature, meetingNumber, meetingPassword);
+    // startMeeting(signature, meetingNumber, meetingPassword);
   };
 
   function startMeeting(
@@ -105,7 +118,88 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
           userEmail: userUsed.email,
           success: (success: unknown) => {
             console.log(success);
+            // ZoomMtg.inMeetingServiceListener('onRoomStatusChange', function (data: unknown) {
+            //   console.log('Meeting Status:', data);
+
+            //   // Check for meeting status 3, which indicates the meeting is ending
+            //   // if (data.meetingStatus === 3) {
+            //     // Here, you need to check if it's actually the host ending the meeting for all
+            //     // This can typically be done by checking if you are still in the meeting.
+            //     console.log("Meeting has ended for everyone.");
+            //     alert("Meeting ended for all participants!");
+            //     // Execute your action here (like redirecting or updating state)
+            //   // }
+            // });
+            // ZoomMtg.getAttendeeslist({
+            //   success: function (res: { result: string }) {
+            //     console.log('getAttendeeslist', res.result);
+            //   }
+            // })
+
+            ZoomMtg.inMeetingServiceListener(
+              "onMeetingStatus",
+              async (data: { meetingStatus: number }) => {
+                console.log("Meeting Status Change:", data);
+
+                // Meeting status codes:
+                // 0 - Meeting not started
+                // 1 - Meeting connecting
+                // 2 - Meeting connected
+                // 3 - Meeting ended or the participant left
+
+                if (data.meetingStatus === 3) {
+                  console.log(
+                    "Meeting status 3 triggered, determining if meeting ended for all or just user left..."
+                  );
+
+                  // Optional: Get the current user's role (1 = host, 0 = participant)
+                  // const isHost = await ZoomMtg.getCurrentUser({
+                  //   success: (res: {result: {role: number}}) => {
+                  //     console.log("Current user info:", res.result);
+                  //     return res.result.role === 1; // return true if host
+                  //   },
+                  // });
+                  // console.log("isHost:", isHost);
+
+                  // Check attendees list after the status change
+                  // await ZoomMtg.getAttendeeslist({
+                  //   success: function (res: { result: { attendeesList: unknown[] } }) {
+                  //     const attendees = res.result.attendeesList;
+                  //     console.log("Attendees:", attendees);
+
+                  //     // if (attendees.length === 0 && isHost) {
+                  //     //   // If there are no attendees left and the user is the host, the meeting has ended for everyone
+                  //     //   console.log("Meeting ended for everyone.");
+                  //     //   alert(
+                  //     //     "The meeting has been ended for all participants."
+                  //     //   );
+                  //     // } else if (attendees.length > 0) {
+                  //     //   // If there are still attendees, it means only the current user has left
+                  //     //   console.log("You have left the meeting.");
+                  //     //   alert(
+                  //     //     "You have left the meeting, but it is still ongoing."
+                  //     //   );
+                  //     // }
+                  //   }
+                  // });
+
+                  // Introduce a delay to ensure attendees list is updated
+                  setTimeout(async () => {
+                    // Fetch attendees list after the status change
+                    await ZoomMtg.getAttendeeslist({
+                      success: (res: {
+                        result: { attendeesList: unknown[] };
+                      }) => {
+                        const attendees = res.result.attendeesList;
+                        console.log("Attendees after delay:", attendees);
+                      },
+                    });
+                  }, 2000);
+                }
+              }
+            );
           },
+
           error: (error: unknown) => {
             console.log("error ::>>> ", error);
           },
