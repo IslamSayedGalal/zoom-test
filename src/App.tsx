@@ -26,7 +26,7 @@ function App() {
   return (
     <Routes>
       {/* Define a route with a dynamic userId parameter */}
-      {/* <Route path="/" element={<MeetingPage />} /> */}
+      <Route path="/:id" element={<MeetingPage />} />
       <Route path="/meeting/:id" element={<MeetingPage />} />
     </Routes>
   );
