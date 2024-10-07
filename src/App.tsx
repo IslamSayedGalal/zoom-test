@@ -4,7 +4,7 @@ import "./App.css";
 import { CreateMeeting } from "./CreateMeeting";
 import { JoinMeeting } from "./JoinMeeting";
 
-function MeetingPage() {
+function App() {
   // const { id } = useParams();
   const id = 1;
   const [meetingData, setMeetingData] = useState<{id: string, password: string}>({ id: "", password: "" });
@@ -22,15 +22,15 @@ function MeetingPage() {
   );
 }
 
-function App() {
-  return (
-    <Routes>
-      {/* Define a route with a dynamic userId parameter */}
-      <Route path="/" element={<MeetingPage />} />
-      {/* <Route path="/:id" element={<MeetingPage />} /> */}
-      {/* <Route path="/meeting/:id" element={<MeetingPage />} /> */}
-    </Routes>
-  );
-}
+// function App() {
+//   return (
+//     <Routes>
+//       {/* Define a route with a dynamic userId parameter */}
+//       <Route path="/" element={<MeetingPage />} />
+//       {/* <Route path="/:id" element={<MeetingPage />} /> */}
+//       {/* <Route path="/meeting/:id" element={<MeetingPage />} /> */}
+//     </Routes>
+//   );
+// }
 
 export default App;
