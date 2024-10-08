@@ -10,7 +10,7 @@ function MeetingPage() {
   const [meetingData, setMeetingData] = useState<{
     id: string;
     password: string;
-  }>({ id: "98187899279", password: "123456" });
+  }>({ id: "96252223660", password: "123456" });
 
   // Handler to update the id state when the input changes
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {

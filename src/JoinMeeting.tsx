@@ -1,5 +1,4 @@
 import { ZoomMtg } from "@zoom/meetingsdk";
-import { useState } from "react";
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
@@ -19,11 +18,6 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
   const sdkKey = "ripqfBNqQ5e8dSdrWMKpA";
   // const sdkKey = "p9ZvyOLMT_ihW2e8naMgiQ";
   const leaveUrl = "http://localhost:5173";
-  const [dataUser, setDataUser] = useState<{
-    id: number;
-    name: string;
-    email: string;
-  }>();
 
   // let userUsed = {
   //   id: 1,
@@ -67,30 +61,36 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
       return;
     }
 
+    let userData = {
+      id: 1,
+      name: "test",
+      email: "test@gmail.com",
+    };
+
     if (id === 1) {
-      setDataUser({
+      userData = {
         id: 1,
         name: "Islam Galal 1",
         email: "islamgalal@gmail.com",
-      });
+      };
     } else if (id === 2) {
-      setDataUser({
+      userData = {
         id: 0,
         name: "Islam Galal 2",
         email: "islamgalal2@gmail.com",
-      });
+      };
     } else if (id === 3) {
-      setDataUser({
+      userData = {
         id: 0,
         name: "Islam Galal 3",
         email: "islamgalal3@gmail.com",
-      });
+      };
     } else if (id === 4) {
-      setDataUser({
+      userData = {
         id: 0,
         name: "Islam Galal 4",
         email: "islamgalal4@gmail.com",
-      });
+      };
     }
 
     // const authEndpoint = "http://localhost:4000";
@@ -104,14 +104,14 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           meetingNumber: meetingNumber,
-          role: dataUser?.id || 1,
+          role: userData?.id || 1,
         }),
       });
 
       const res = await req.json();
       console.log("res", res.signature);
       const signature = res.signature as string;
-      startMeeting(signature, meetingNumber, meetingData.password);
+      startMeeting(signature, meetingNumber, meetingData.password, userData);
     } catch (e) {
       console.log(e);
     }
@@ -126,7 +126,8 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
   function startMeeting(
     signature: string,
     meetingId: string,
-    password: string
+    password: string,
+    userData: { id: number; name: string; email: string }
   ) {
     document.getElementById("zmmtg-root")!.style.display = "block";
 
@@ -141,8 +142,8 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
           sdkKey: sdkKey,
           meetingNumber: meetingId, // Use the new meeting ID
           passWord: password, // Use the created meeting password
-          userName: dataUser?.name || "",
-          userEmail: dataUser?.email || "",
+          userName: userData.name,
+          userEmail: userData.email,
           success: (success: unknown) => {
             console.log(success);
             ZoomMtg.inMeetingServiceListener(
