@@ -118,24 +118,6 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
           userEmail: userUsed.email,
           success: (success: unknown) => {
             console.log(success);
-            // ZoomMtg.inMeetingServiceListener('onRoomStatusChange', function (data: unknown) {
-            //   console.log('Meeting Status:', data);
-
-            //   // Check for meeting status 3, which indicates the meeting is ending
-            //   // if (data.meetingStatus === 3) {
-            //     // Here, you need to check if it's actually the host ending the meeting for all
-            //     // This can typically be done by checking if you are still in the meeting.
-            //     console.log("Meeting has ended for everyone.");
-            //     alert("Meeting ended for all participants!");
-            //     // Execute your action here (like redirecting or updating state)
-            //   // }
-            // });
-            // ZoomMtg.getAttendeeslist({
-            //   success: function (res: { result: string }) {
-            //     console.log('getAttendeeslist', res.result);
-            //   }
-            // })
-
             ZoomMtg.inMeetingServiceListener(
               "onMeetingStatus",
               async (data: { meetingStatus: number }) => {
@@ -153,48 +135,13 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
                   );
 
                   // Optional: Get the current user's role (1 = host, 0 = participant)
-                  // const isHost = await ZoomMtg.getCurrentUser({
-                  //   success: (res: {result: {role: number}}) => {
-                  //     console.log("Current user info:", res.result);
-                  //     return res.result.role === 1; // return true if host
-                  //   },
-                  // });
-                  // console.log("isHost:", isHost);
-
-                  // Check attendees list after the status change
-                  // await ZoomMtg.getAttendeeslist({
-                  //   success: function (res: { result: { attendeesList: unknown[] } }) {
-                  //     const attendees = res.result.attendeesList;
-                  //     console.log("Attendees:", attendees);
-
-                  //     // if (attendees.length === 0 && isHost) {
-                  //     //   // If there are no attendees left and the user is the host, the meeting has ended for everyone
-                  //     //   console.log("Meeting ended for everyone.");
-                  //     //   alert(
-                  //     //     "The meeting has been ended for all participants."
-                  //     //   );
-                  //     // } else if (attendees.length > 0) {
-                  //     //   // If there are still attendees, it means only the current user has left
-                  //     //   console.log("You have left the meeting.");
-                  //     //   alert(
-                  //     //     "You have left the meeting, but it is still ongoing."
-                  //     //   );
-                  //     // }
-                  //   }
-                  // });
-
-                  // Introduce a delay to ensure attendees list is updated
-                  setTimeout(async () => {
-                    // Fetch attendees list after the status change
-                    await ZoomMtg.getAttendeeslist({
-                      success: (res: {
-                        result: { attendeesList: unknown[] };
-                      }) => {
-                        const attendees = res.result.attendeesList;
-                        console.log("Attendees after delay:", attendees);
-                      },
-                    });
-                  }, 2000);
+                  const isHost = await ZoomMtg.getCurrentUser({
+                    success: (res: {result: {role: number}}) => {
+                      console.log("Current user info:", res.result);
+                      return res.result.role === 1; // return true if host
+                    },
+                  });
+                  console.log("isHost:", isHost);
                 }
               }
             );

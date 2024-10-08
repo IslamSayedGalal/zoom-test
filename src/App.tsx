@@ -1,13 +1,21 @@
 import { useState } from "react";
-// import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { CreateMeeting } from "./CreateMeeting";
 import { JoinMeeting } from "./JoinMeeting";
 
-function App() {
+function MeetingPage() {
   // const { id } = useParams();
-  const id = 1;
-  const [meetingData, setMeetingData] = useState<{id: string, password: string}>({ id: "", password: "" });
+  const [id, setId] = useState<number>(1);
+  const [meetingData, setMeetingData] = useState<{
+    id: string;
+    password: string;
+  }>({ id: "98187899279", password: "123456" });
+
+  // Handler to update the id state when the input changes
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setId(Number(e.target.value)); // Update the id state with the input value
+  };
 
   console.log("id", id); // Access the userId from the URL params
 
@@ -15,6 +23,12 @@ function App() {
     <div className="App">
       <main>
         <h1>Zoom Meeting SDK Sample React</h1>
+        <input
+          type="number"
+          value={id}
+          onChange={handleIdChange} // Update id on input change
+          placeholder="Enter Meeting ID"
+        />
         <CreateMeeting setMeetingData={setMeetingData} />
         <JoinMeeting meetingData={meetingData} id={id} />
       </main>
@@ -22,15 +36,13 @@ function App() {
   );
 }
 
-// function App() {
-//   return (
-//     <Routes>
-//       {/* Define a route with a dynamic userId parameter */}
-//       <Route path="/" element={<MeetingPage />} />
-//       {/* <Route path="/:id" element={<MeetingPage />} /> */}
-//       {/* <Route path="/meeting/:id" element={<MeetingPage />} /> */}
-//     </Routes>
-//   );
-// }
+function App() {
+  return (
+    <Routes>
+      {/* Define a route with a dynamic userId parameter */}
+      <Route path="/" element={<MeetingPage />} />
+    </Routes>
+  );
+}
 
 export default App;
