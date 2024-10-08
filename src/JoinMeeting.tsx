@@ -1,4 +1,5 @@
 import { ZoomMtg } from "@zoom/meetingsdk";
+import { useState } from "react";
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
@@ -15,59 +16,81 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
   console.log("id: ", id);
   console.log("meetingData: ", meetingData);
   console.log("typeof : ", typeof id);
-
   const sdkKey = "ripqfBNqQ5e8dSdrWMKpA";
   // const sdkKey = "p9ZvyOLMT_ihW2e8naMgiQ";
   const leaveUrl = "http://localhost:5173";
+  const [dataUser, setDataUser] = useState<{
+    id: number;
+    name: string;
+    email: string;
+  }>();
 
-  const user1 = {
-    id: 1,
-    name: "Islam Galal 1",
-    email: "islam.galal@mobidevlabs.com",
-  };
+  // let userUsed = {
+  //   id: 1,
+  //   name: "",
+  //   email: ""
+  // };
 
-  const user2 = {
-    id: 0,
-    name: "Islam Galal 2",
-    email: "eslamgalal0312@gmail.com",
-  };
-
-  const user3 = {
-    id: 0,
-    name: "Islam Galal 3",
-    email: "eslamgalal312@gmail.com",
-  };
-
-  const user4 = {
-    id: 0,
-    name: "Islam Galal 4",
-    email: "@gmail.com",
-  };
-
-  let userUsed = {
-    id: 1,
-    name: "",
-    email: ""
-  };
-
-  if (id === "1") {
-    console.log("user1", user1);
-    userUsed = user1;
-  } else if (id === "2") {
-    console.log("user2", user2);
-    userUsed = user2;
-  } else if (id === "3") {
-    console.log("user3", user3);
-    userUsed = user3;
-  } else if (id === "4") {
-    console.log("user4", user4);
-    userUsed = user4;
-  }
+  // if (id === "1") {
+  //   userUsed ={
+  //     id: 1,
+  //     name: "Islam Galal 1",
+  //     email: "islamgalal1@gmail.com"
+  //   };
+  //   console.log("user1", userUsed);
+  // } else if (id === "2") {
+  //   userUsed = {
+  //     id: 0,
+  //     name: "Islam Galal 2",
+  //     email: "islamgalal2@gmail.com"
+  //   };
+  //   console.log("user2", userUsed);
+  // } else if (id === "3") {
+  //   userUsed = {
+  //     id: 0,
+  //     name: "Islam Galal 3",
+  //     email: "islamgalal3@gmail.com"
+  //   };
+  //   console.log("user3", userUsed);
+  // } else if (id === "4") {
+  //   userUsed = {
+  //     id: 0,
+  //     name: "Islam Galal 4",
+  //     email: "islamgalal4@gmail.com"
+  //   };
+  //   console.log("user4", userUsed);
+  // }
 
   const getSignature = async () => {
     if (!meetingData) {
       console.error("No meeting data available.");
       return;
+    }
+
+    if (id === 1) {
+      setDataUser({
+        id: 1,
+        name: "Islam Galal 1",
+        email: "islamgalal@gmail.com",
+      });
+    } else if (id === 2) {
+      setDataUser({
+        id: 0,
+        name: "Islam Galal 2",
+        email: "islamgalal2@gmail.com",
+      });
+    } else if (id === 3) {
+      setDataUser({
+        id: 0,
+        name: "Islam Galal 3",
+        email: "islamgalal3@gmail.com",
+      });
+    } else if (id === 4) {
+      setDataUser({
+        id: 0,
+        name: "Islam Galal 4",
+        email: "islamgalal4@gmail.com",
+      });
     }
 
     // const authEndpoint = "http://localhost:4000";
@@ -81,7 +104,7 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           meetingNumber: meetingNumber,
-          role: userUsed.id || 1,
+          role: dataUser?.id || 1,
         }),
       });
 
@@ -118,8 +141,8 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
           sdkKey: sdkKey,
           meetingNumber: meetingId, // Use the new meeting ID
           passWord: password, // Use the created meeting password
-          userName: userUsed.name,
-          userEmail: userUsed.email,
+          userName: dataUser?.name || "",
+          userEmail: dataUser?.email || "",
           success: (success: unknown) => {
             console.log(success);
             ZoomMtg.inMeetingServiceListener(
@@ -140,7 +163,7 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
 
                   // Optional: Get the current user's role (1 = host, 0 = participant)
                   const isHost = await ZoomMtg.getCurrentUser({
-                    success: (res: {result: {role: number}}) => {
+                    success: (res: { result: { role: number } }) => {
                       console.log("Current user info:", res.result);
                       return res.result.role === 1; // return true if host
                     },
