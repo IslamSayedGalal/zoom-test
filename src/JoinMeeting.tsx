@@ -22,29 +22,33 @@ export const JoinMeeting = ({ meetingData, id }: JoinMeetingProps) => {
 
   const user1 = {
     id: 1,
-    name: "Islam Galal",
+    name: "Islam Galal 1",
     email: "islam.galal@mobidevlabs.com",
   };
 
   const user2 = {
     id: 0,
-    name: "Islam Sayed Galal",
+    name: "Islam Galal 2",
     email: "eslamgalal0312@gmail.com",
   };
 
   const user3 = {
     id: 0,
-    name: "Islam Sayed Galal 2",
+    name: "Islam Galal 3",
     email: "eslamgalal312@gmail.com",
   };
 
   const user4 = {
     id: 0,
-    name: "Islam Sayed Galal 3",
+    name: "Islam Galal 4",
     email: "@gmail.com",
   };
 
-  let userUsed = user1;
+  let userUsed = {
+    id: 1,
+    name: "",
+    email: ""
+  };
 
   if (id === "1") {
     console.log("user1", user1);
